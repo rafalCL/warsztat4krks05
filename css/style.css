@@ -1,0 +1,9 @@
+div.title{
+  background-color: aquamarine;
+}
+
+div.description {
+  background-color: bisque;
+  font-size: smaller;
+  display: none;
+}
