@@ -1,9 +1,15 @@
 $(document).ready(function(){
   var bookListDiv = $("#book-list");
+  var addBookForm = $("#add-book-form");
 
   bookListDiv.on("click", "div.title", handleTitleClick);
+  addBookForm.on("submit", handleAddBookSubmit);
 
-  renderBookList(bookListDiv);
+  refreshBookList();
+
+  function refreshBookList(){
+    renderBookList(bookListDiv);
+  }
 
   function renderBookList(renderingPoint){
     $.ajax({
@@ -31,7 +37,7 @@ $(document).ready(function(){
     var bookId = thisBookTitleDiv.data("book-id");
     var thisBookDescriptionDiv =
         thisBookTitleDiv.next("div.description");
-    console.log(bookId);
+
     $.ajax({
       "url": "http://localhost:8282/books/"+bookId,
       "type": "GET",
@@ -61,4 +67,29 @@ $(document).ready(function(){
     ); // done
   } // handleTitleClick
 
+  function handleAddBookSubmit(e){
+    var newBook = {
+      "title": this.elements.title.value,
+      "author": this.elements.author.value,
+      "publisher": this.elements.publisher.value,
+      "type": this.elements.type.value,
+      "isbn": this.elements.isbn.value,
+    }
+
+    $.ajax({
+      "url": "http://localhost:8282/books/",
+      "type": "POST",
+      "data": JSON.stringify(newBook),
+      "contentType": "application/json; charset=utf-8",
+      "dataType": "json",
+    }).done(function(){
+      refreshBookList();
+    }).fail(function(xhr, status, err){
+      console.log("ERR", xhr, status, err);
+      alert(err);
+    });
+
+    e.preventDefault();
+    return false;
+  }
 });
