@@ -7,3 +7,7 @@ div.description {
   font-size: smaller;
   display: none;
 }
+
+button.del-book-btn{
+  background-color: red;
+}
